@@ -47,7 +47,11 @@ public class NewBehaviourScript : MonoBehaviour
         RunKinematicArrive();
     }
 
-    
+    private void RunAStarAlgorithm () {
+        //add the start node to the open list (MinHeap)
+        
+    }
+
     private void RunKinematicArrive () {
 
         //Create vector from character to target

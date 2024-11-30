@@ -37,6 +37,7 @@ public class CirclePlacer : MonoBehaviour
 
                 // Instantiate the circle prefab at the clicked position
                 Instantiate(circlePrefab, spawnPosition, Quaternion.identity);
+                
             }
         }
     }
