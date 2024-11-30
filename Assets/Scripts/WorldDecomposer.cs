@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class WorldDecomposer : MonoBehaviour {
 
+/*
 	private int [,] worldData;
 	private int nodeSize;
 
@@ -74,4 +75,5 @@ public class WorldDecomposer : MonoBehaviour {
 		}
 
 	}
+	*/
 }
