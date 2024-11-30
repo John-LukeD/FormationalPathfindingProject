@@ -1108,7 +1108,7 @@ GameObject:
   - component: {fileID: 867205584}
   - component: {fileID: 867205583}
   - component: {fileID: 867205582}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Sphere
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1816,7 +1816,7 @@ GameObject:
   - component: {fileID: 1481955103}
   - component: {fileID: 1481955102}
   - component: {fileID: 1481955106}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Leader
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2242,7 +2242,7 @@ GameObject:
   - component: {fileID: 2133158162}
   - component: {fileID: 2133158161}
   - component: {fileID: 2133158160}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Sphere (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -6,7 +6,7 @@ using UnityEngine;
 public class MinHeap<T> where T : IComparable<T>
 {
     private List<T> heap;
-    private int size;
+    [SerializeField] private int size;
 
     public MinHeap()
     {

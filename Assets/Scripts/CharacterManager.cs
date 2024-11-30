@@ -15,6 +15,8 @@ public class NewBehaviourScript : MonoBehaviour
     // Reference to the plane's collider
     [SerializeField] private Collider planeCollider;
     private float obstacleBumpSpeed;
+    //declare minHeap
+    MinHeap<Node> minHeap = new MinHeap<Node>();
 
     // Start is called before the first frame update
     void Start()
@@ -49,6 +51,20 @@ public class NewBehaviourScript : MonoBehaviour
 
     private void RunAStarAlgorithm () {
         //add the start node to the open list (MinHeap)
+        //currNode = startNode
+        //everything run inside loop below
+        //while (currNode != goalNode || openlist.size !=0 )
+        //1)	Pop off node from min heap (automatically the node with the lowest F) and set as currNode
+        //2)	Check if currNode is goalNode 
+        //a) if yes {break - generate path back from parents} if no go to b
+        //b)  if no Generate neighbors (all available moves that we can make from here 
+        //(if you don’t want diagonal movement don’t generate diagonal tiles) do a 
+        //nested for loop to generate the 9 tiles and set F, G, H, and Parent values. 
+        //A neighbor is invalid if it is outside the bounds of the environment, if the node 
+        //is an obstacle, 
+        //3)	Add all generates neighbors to open list as they have been discovered
+        //4)	Add currNode to closed list
+        //5)	Go back to step 1
         
     }
 
