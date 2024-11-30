@@ -14,7 +14,6 @@ public class NewBehaviourScript : MonoBehaviour
     [SerializeField] private Transform targetTransform;
     // Reference to the plane's collider
     [SerializeField] private Collider planeCollider;
-    private float obstacleBumpSpeed;
     //declare minHeap
     MinHeap<Node> minHeap = new MinHeap<Node>();
 
@@ -23,7 +22,6 @@ public class NewBehaviourScript : MonoBehaviour
     {
         moveSpeed = 7f;
         radiusOfSatisfaction = 1.5f;
-        obstacleBumpSpeed = 0.1f;
     }
 
     // Update is called once per frame
@@ -94,36 +92,4 @@ public class NewBehaviourScript : MonoBehaviour
         myTransform.position = newPosition;
         
     }
-
-    private void OnCollisionEnter (Collision collision) {
-
-		if (collision.gameObject.tag != "Sphere"){
-			return;
-
-		}
-
-		// Calcualte vector from player to obstacle
-		Vector3 toObstacle = (collision.gameObject.transform.position - myTransform.position).normalized;
-		toObstacle.Normalize ();
-
-        //I set 
-		toObstacle.y = 0f;
-
-		//Debug.DrawRay (trans.position + Vector3.up, toObstacle, Color.yellow);
-		//Debug.DrawRay (trans.position + Vector3.up, trans.right, Color.cyan);
-
-		float dot = Vector3.Dot (myTransform.right, toObstacle);
-		
-
-		//push character away from obstacle
-		myTransform.position -= toObstacle * .02f;
-
-		// Obstacle is on the left of the obstacle -> push player right
-		if (dot < 0) {
-			myTransform.position += myTransform.right * obstacleBumpSpeed;
-		} else {
-			myTransform.position += myTransform.right * -1f * obstacleBumpSpeed;
-		}
-
-	}
 }
