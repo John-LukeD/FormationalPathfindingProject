@@ -18,10 +18,10 @@ public class CirclePlacer : MonoBehaviour
 	private int cols;
 
 
-    // Start is called before the first frame update
+    //Start is called before the first frame update
     void Start()
     {
-        // Find the plane by its tag, or directly by finding the collider in the scene
+        //Find the plane by its tag, or directly by finding the collider in the scene
         planeCollider = GameObject.FindGameObjectWithTag("Plane").GetComponent<Collider>();
         
         if (planeCollider == null)
@@ -44,21 +44,21 @@ public class CirclePlacer : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        // Check for right mouse button click (1 represents right click)
+        //Check for right mouse button click (1 represents right click)
         if (Input.GetMouseButtonDown(1))
         {
-            // Create a ray from the camera to the mouse click position
+            //Create a ray from the camera to the mouse click position
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
 
-            // Check if the ray intersects with the plane's collider
+            //Check if the ray intersects with the plane's collider
             if (planeCollider.Raycast(ray, out hit, Mathf.Infinity))
             {
-                // Get the position where the user clicked
+                //Get the position where the user clicked
                 Vector3 spawnPosition = hit.point;
                 spawnPosition.y = .5f;
 
-                // Instantiate the circle prefab at the clicked position
+                //Instantiate the circle prefab at the clicked position
                 Instantiate(circlePrefab, spawnPosition, Quaternion.identity);
                 
                 //If a new circle is placed, Decompose world
@@ -84,10 +84,7 @@ public class CirclePlacer : MonoBehaviour
 
 				Vector3 startPos = new Vector3 (x, 20f, z);
 
-				
-
 				// Does our raycast hit anything at this point in the map
-
 				RaycastHit hit2;
 
 				// Bit shift the index of the layer (8) to get a bit mask
@@ -112,4 +109,32 @@ public class CirclePlacer : MonoBehaviour
 		}
 
 	}
+
+    //Calculate the grid node corresponding to the character's current position
+    public Vector2Int GetStartNode(Vector3 characterPosition)
+    {
+        //Calculate the column index in the grid by dividing the character's X position by the node size
+        int col = Mathf.FloorToInt(characterPosition.x / nodeSize);
+        //Calculate the row index in the grid by dividing the character's Z position by the node size
+        int row = Mathf.FloorToInt(characterPosition.z / nodeSize);
+
+        //col = Mathf.Clamp(col, 0, cols - 1);
+        //row = Mathf.Clamp(row, 0, rows - 1);
+
+        return new Vector2Int(row, col);
+    }
+
+    //Calculate the grid node corresponding to the character's target position
+    public Vector2Int GetTargetNode(Vector3 targetPosition)
+    {
+        //Calculate the column index in the grid by dividing the target X position by the node size
+        int col = Mathf.FloorToInt(targetPosition.x / nodeSize);
+        //Calculate the row index in the grid by dividing the target Z position by the node size
+        int row = Mathf.FloorToInt(targetPosition.z / nodeSize);
+
+        //col = Mathf.Clamp(col, 0, cols - 1); // Ensure column is within grid bounds
+        //row = Mathf.Clamp(row, 0, rows - 1); // Ensure row is within grid bounds
+
+        return new Vector2Int(row, col); // Return the target node as grid coordinates (row, col)
+    }
 }

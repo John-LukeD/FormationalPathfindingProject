@@ -12,7 +12,7 @@ public class NewBehaviourScript : MonoBehaviour
     [SerializeField] private Transform myTransform;
     //transform of target (user left click)
     [SerializeField] private Transform targetTransform;
-    // Reference to the plane's collider
+    // Reference to the plane's collider to get target transform based off RaycastHit
     [SerializeField] private Collider planeCollider;
     //declare minHeap
     MinHeap<Node> minHeap = new MinHeap<Node>();
@@ -41,28 +41,44 @@ public class NewBehaviourScript : MonoBehaviour
             {
                 //set intersection point as the target position
                 targetTransform.position = hit.point;
+
+                //Get startNode and GoalNode and passs it to RunAStarAlgorithm
+                CirclePlacer circlePlacer = FindObjectOfType<CirclePlacer>();
+                if (circlePlacer != null)
+                {
+                    //Calculate startNode
+                    Vector2Int startNode = circlePlacer.GetStartNode(myTransform.position);
+                    Debug.Log($"Start Node: {startNode}");
+
+                    //Calculate goalNode
+                    Vector2Int targetNode = circlePlacer.GetTargetNode(targetTransform.position);
+                    Debug.Log($"Target Node: Row {targetNode.x}, Col {targetNode.y}");
+
+                    // Pass startNode to RunAStarAlgorithm
+                    RunAStarAlgorithm(startNode, targetNode);
+                }
             }
         }
 
         RunKinematicArrive();
     }
 
-    private void RunAStarAlgorithm () {
-        //add the start node to the open list (MinHeap)
-        //currNode = startNode
-        //everything run inside loop below
-        //while (currNode != goalNode || openlist.size !=0 )
-        //1)	Pop off node from min heap (automatically the node with the lowest F) and set as currNode
-        //2)	Check if currNode is goalNode 
-        //a) if yes {break - generate path back from parents} if no go to b
-        //b)  if no Generate neighbors (all available moves that we can make from here 
-        //(if you don’t want diagonal movement don’t generate diagonal tiles) do a 
-        //nested for loop to generate the 9 tiles and set F, G, H, and Parent values. 
-        //A neighbor is invalid if it is outside the bounds of the environment, if the node 
-        //is an obstacle, 
-        //3)	Add all generates neighbors to open list as they have been discovered
-        //4)	Add currNode to closed list
-        //5)	Go back to step 1
+    private void RunAStarAlgorithm (Vector2Int startNode, Vector2Int goalNode) {
+        // add the start node to the open list (MinHeap)
+        // currNode = startNode
+        // everything run inside loop below
+        // while (currNode != goalNode || openlist.size !=0 )
+        // 1) Pop off node from min heap (automatically the node with the lowest F) and set as currNode
+        // 2) Check if currNode is goalNode 
+        // a) if yes {break - generate path back from parents} if no go to b
+        // b) if no Generate neighbors (all available moves that we can make from here 
+        // (if you don’t want diagonal movement don’t generate diagonal tiles) do a 
+        // nested for loop to generate the 9 tiles and set F, G, H, and Parent values. 
+        // A neighbor is invalid if it is outside the bounds of the environment or
+        // if the node is an obstacle, 
+        // 3) Add all generates neighbors to open list as they have been discovered
+        // 4) Add currNode to closed list
+        // 5) Go back to step 1
         
     }
 
@@ -77,7 +93,7 @@ public class NewBehaviourScript : MonoBehaviour
             return;
         }
 
-        // Normalize vector to only use the direction (shrink vector to length of 1)
+        //Normalize vector to only use the direction (shrink vector to length of 1)
         towardsTarget = towardsTarget.normalized;
 
         //face the target
