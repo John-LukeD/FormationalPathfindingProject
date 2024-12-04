@@ -8,7 +8,7 @@ public class CirclePlacer : MonoBehaviour
     [SerializeField] private Collider planeCollider;
 
     //WorldDecomposer variables below
-    private int [,] worldData;
+    public static Node [,] worldData;
 	private int nodeSize;
 
 	private int terrainWidth;
@@ -38,7 +38,7 @@ public class CirclePlacer : MonoBehaviour
 		rows = terrainWidth / nodeSize;
 		cols = terrainLength / nodeSize;
 
-		worldData = new int [rows, cols];
+		worldData = new Node [rows, cols];
     }
 
     // Update is called once per frame
@@ -99,19 +99,52 @@ public class CirclePlacer : MonoBehaviour
 
 					print ("Hit something at row: " + row + " col: " + col);
 					Debug.DrawRay (startPos, Vector3.down * 20, Color.red, 50000);
-					worldData [row, col] = 1;
+					worldData [row, col] = new Node(row, col, 1);
 
 				} else {
 					Debug.DrawRay (startPos, Vector3.down * 20, Color.green, 50000);
-					worldData [row, col] = 0;
+					worldData [row, col] = new Node(row, col, 0);
 				}
 			}
 		}
 
 	}
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     //Calculate the grid node corresponding to the character's current position
-    public Vector2Int GetStartNode(Vector3 characterPosition)
+    public Node GetStartNode(Vector3 characterPosition)
     {
         //Calculate the column index in the grid by dividing the character's X position by the node size
         int col = Mathf.FloorToInt(characterPosition.x / nodeSize);
@@ -121,11 +154,12 @@ public class CirclePlacer : MonoBehaviour
         //col = Mathf.Clamp(col, 0, cols - 1);
         //row = Mathf.Clamp(row, 0, rows - 1);
 
-        return new Vector2Int(row, col);
+
+        return new Node(row, col, 0);
     }
 
     //Calculate the grid node corresponding to the character's target position
-    public Vector2Int GetTargetNode(Vector3 targetPosition)
+    public Node GetTargetNode(Vector3 targetPosition)
     {
         //Calculate the column index in the grid by dividing the target X position by the node size
         int col = Mathf.FloorToInt(targetPosition.x / nodeSize);
@@ -135,6 +169,6 @@ public class CirclePlacer : MonoBehaviour
         //col = Mathf.Clamp(col, 0, cols - 1); // Ensure column is within grid bounds
         //row = Mathf.Clamp(row, 0, rows - 1); // Ensure row is within grid bounds
 
-        return new Vector2Int(row, col); // Return the target node as grid coordinates (row, col)
+        return new Node(row, col, 0); // Return the target node as grid coordinates (row, col)
     }
 }

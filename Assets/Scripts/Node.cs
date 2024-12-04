@@ -14,6 +14,7 @@ public class Node : IComparable<Node>
     /// <param name="r">The row position of the node.</param>
     /// <param name="c">The column position of the node.</param>
     /// <param name="t">The type of the node (0 for traversable, 1 for non-traversable).</param>
+    /// row = z col = x
     public Node(int r, int c, int t)
     {
         this.row = r;
