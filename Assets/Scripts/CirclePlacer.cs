@@ -79,6 +79,7 @@ public class CirclePlacer : MonoBehaviour
 
 			for (int col = 0; col < cols; col++) {
 
+////////////////////////////////////////////////////////////
 				float x = startX + nodeCenterOffset + (nodeSize * col);
 				float z = startZ + nodeCenterOffset + (nodeSize * row);
 

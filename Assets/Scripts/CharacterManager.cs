@@ -20,7 +20,7 @@ public class NewBehaviourScript : MonoBehaviour
     //declare LinkedList of type node for our closedList
     private static LinkedList<Node> closedList = new LinkedList<Node>();
     // List to store the final path in reverse order.
-    public static List<Node> reverseOrder = new List<Node>(); 
+    public static LinkedList<Node> reverseOrder = new LinkedList<Node>(); 
 
     private static int startCol;
     private static int startRow;
@@ -31,6 +31,7 @@ public class NewBehaviourScript : MonoBehaviour
     private static Node currNode;
     private static Node startNode;
     private static Node goalNode;
+    private static Node tempNode;
 
     // Start is called before the first frame update
     void Start()
@@ -57,7 +58,7 @@ public class NewBehaviourScript : MonoBehaviour
                 //set intersection point as the target position
                 targetTransform.position = hit.point;
 
-                //Get startNode and GoalNode and passs it to RunAStarAlgorithm
+                //Get startNode and GoalNode and pass it to RunAStarAlgorithm
                 startCol = (int)(myTransform.position.x);
                 startRow = (int)(myTransform.position.z);
                 goalCol = (int)(targetTransform.position.x);
@@ -69,30 +70,9 @@ public class NewBehaviourScript : MonoBehaviour
                 startNode = new Node(startRow,startCol,0);
                 goalNode = new Node(goalRow, goalCol,0);
 
-                //RunAStarAlgorithm(startNode, goalNode);
-
-
-
-
-
-
-                //CirclePlacer circlePlacer = FindObjectOfType<CirclePlacer>();
-                //if (circlePlacer != null)
-                //{
-                    //Calculate startNode
-                    //Node startNode = circlePlacer.GetStartNode(myTransform.position);
-                    //Debug.Log($"Start Node: {startNode}");
-
-                    //Calculate goalNode
-                    //Node targetNode = circlePlacer.GetTargetNode(targetTransform.position);
-                    //Debug.Log($"Target Node: Row {targetNode.x}, Col {targetNode.y}");
-
-                    // Pass startNode and targetNode to RunAStarAlgorithm
-                    //RunAStarAlgorithm(startNode, targetNode);
-                //}
+                RunAStarAlgorithm(startNode, goalNode);
             }
         }
-
         RunKinematicArrive();
     }
 
@@ -102,7 +82,7 @@ public class NewBehaviourScript : MonoBehaviour
         // currNode = startNode
         currNode = CirclePlacer.worldData[startRow, startCol];
         // everything run inside loop below
-        while (currNode != goalNode || minHeap.size != 0 )
+        while ((currNode.GetCol() != goalCol && currNode.GetRow() != goalRow) || minHeap.size != 0 )
         {
             // 1) Pop off node from min heap (automatically the node with the lowest F) and set as currNode
             currNode = minHeap.Remove();
@@ -113,7 +93,8 @@ public class NewBehaviourScript : MonoBehaviour
                 // Reverse order to get the path from start to goal
                 while (currNode != null) 
                 {
-                    reverseOrder.Add(currNode);
+                    Debug.Log(currNode);
+                    reverseOrder.AddFirst(currNode);
                     currNode = currNode.GetParent();
                 }
                 break;
@@ -185,6 +166,8 @@ public class NewBehaviourScript : MonoBehaviour
         //Check if the character is close enough to the target
         if (towardsTarget.magnitude <= radiusOfSatisfaction) {
             //close enough to stop!
+            //update targetTransform to be reverseOrder.remove()
+            
             return;
         }
 

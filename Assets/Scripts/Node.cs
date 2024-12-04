@@ -70,6 +70,16 @@ public class Node : IComparable<Node>
         this.nodeType = t;
     }
 
+    public void SetRow(int t)
+    {
+        this.row = t;
+    }
+
+    public void SetCol(int t)
+    {
+        this.col = t;
+    }
+
     /// <summary>
     /// Sets the parent node of this node.
     /// </summary>
