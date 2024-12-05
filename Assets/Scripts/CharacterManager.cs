@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-//including using radius of satusfaction and range of speed
 public class NewBehaviourScript : MonoBehaviour
 {
 
@@ -22,16 +21,18 @@ public class NewBehaviourScript : MonoBehaviour
     // List to store the final path in reverse order.
     public static List<Node> reverseOrder = new List<Node>(); 
 
+    //Variables
     private static int startCol;
     private static int startRow;
     private static int goalCol;
     private static int goalRow;
     private static Node currNode;
-    private static Node startNode;
-    private static Node goalNode;
-    private static Node tempNode;
-    // Track the current target node -> this is for tacing the path back
-    // Using kinematicMovement to arrive at each node within reverseOrder List
+    //private static Node startNode;
+    //private static Node goalNode;
+    //private static Node tempNode;
+
+    // Track the current target index -> this is for tarcing the path back
+    // Using kinematicMovement to arrive at each node within reverseOrder List (path from A*)
     private int currentTargetIndex = 0; 
 
     // Start is called before the first frame update
@@ -45,25 +46,25 @@ public class NewBehaviourScript : MonoBehaviour
     void Update()
     {
 
-        //check for user input to update the targetTransform based on click
+        // check for user input to update the targetTransform based on click
         if (Input.GetMouseButtonDown(0)) // Left mouse button clicked
         {
-            //create a ray from the camera to the mouse click position
+            // create a ray from the camera to the mouse click position
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            //store where the raycast hit
+            // store where the raycast hit
             RaycastHit hit;
 
-            //check if the ray intersects with the plane's collider
+            // check if the ray intersects with the plane's collider
             if (planeCollider.Raycast(ray, out hit, Mathf.Infinity))
             {
                 reverseOrder.Clear();
                 minHeap.Clear();
                 closedList.Clear();
                 currentTargetIndex = 0;
-                //set intersection point as the target position
+                // set intersection point as the target position
                 targetTransform.position = hit.point;
 
-                //Get startNode and GoalNode and pass it to RunAStarAlgorithm
+                // Get startNode and GoalNode and pass it to RunAStarAlgorithm
                 startCol = (int)(myTransform.position.x);
                 startRow = (int)(myTransform.position.z);
                 goalCol = (int)(targetTransform.position.x);
@@ -113,8 +114,6 @@ public class NewBehaviourScript : MonoBehaviour
                 // Go back to step 1
             }
         }
-        //If we broke out of while loop, generate path back from parents
-        
     }
 
     // generate the 9 tiles that we can reach from here and set F, G, H, and Parent values. 
@@ -137,7 +136,7 @@ public class NewBehaviourScript : MonoBehaviour
                     }
 
                     // Set the G value (G represents the cost from the start node to this node 
-                    //10 for non-diagonal, 14 for diagonal moves)
+                    // 10 for non-diagonal, 14 for diagonal moves)
                     if (i == goalRow || j == goalCol) {
                         CirclePlacer.worldData[i,j].SetG(10);
                     } else {
@@ -148,10 +147,8 @@ public class NewBehaviourScript : MonoBehaviour
                     int x = Math.Abs(i - goalRow);
                     int y = Math.Abs(j - goalCol);
                     CirclePlacer.worldData[i,j].SetH((x + y) * 10);
-
                     // Calculate and set the F value
                     CirclePlacer.worldData[i,j].SetF();
-
                     // Set the parent to the current node
                     CirclePlacer.worldData[i,j].SetParent(CirclePlacer.worldData[node.GetRow(),node.GetCol()]);
 

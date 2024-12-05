@@ -18,10 +18,10 @@ public class CirclePlacer : MonoBehaviour
 	private int cols;
 
 
-    //Start is called before the first frame update
+    //  Start is called before the first frame update
     void Start()
     {
-        //Find the plane by its tag, or directly by finding the collider in the scene
+        //  Find the plane by its tag, or directly by finding the collider in the scene
         planeCollider = GameObject.FindGameObjectWithTag("Plane").GetComponent<Collider>();
         
         if (planeCollider == null)
@@ -29,7 +29,7 @@ public class CirclePlacer : MonoBehaviour
             Debug.LogError("Plane Collider not found! Make sure the plane has a tag 'Plane' and a Collider attached.");
         }
 
-        //WorldDecomposer below
+        // WorldDecomposer below
         terrainWidth = 50;
 		terrainLength = 50;
 
@@ -46,24 +46,24 @@ public class CirclePlacer : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //Check for right mouse button click (1 represents right click)
+        // Check for right mouse button click (1 represents right click)
         if (Input.GetMouseButtonDown(1))
         {
-            //Create a ray from the camera to the mouse click position
+            // Create a ray from the camera to the mouse click position
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
 
-            //Check if the ray intersects with the plane's collider
+            // Check if the ray intersects with the plane's collider
             if (planeCollider.Raycast(ray, out hit, Mathf.Infinity))
             {
-                //Get the position where the user clicked
+                // Get the position where the user clicked
                 Vector3 spawnPosition = hit.point;
                 spawnPosition.y = .5f;
 
-                //Instantiate the circle prefab at the clicked position
+                // Instantiate the circle prefab at the clicked position
                 Instantiate(circlePrefab, spawnPosition, Quaternion.identity);
                 
-                //If a new circle is placed, Decompose world
+                // If a new circle is placed, Decompose world
                 DecomposeWorld ();
             }
         }

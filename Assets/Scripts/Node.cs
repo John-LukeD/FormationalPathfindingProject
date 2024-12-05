@@ -141,22 +141,3 @@ public class Node : IComparable<Node>
         return HashCode.Combine(row, col);
     }
 }
-
-
-
-/*
-public class Node : MonoBehaviour
-{
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-}
-*/
