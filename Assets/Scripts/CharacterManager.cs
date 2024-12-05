@@ -102,6 +102,19 @@ public class NewBehaviourScript : MonoBehaviour
                     reverseOrder.Insert(0, currNode); // Add to the front of the list
                     currNode = currNode.GetParent();
                 }
+                //MAYBE DELETE
+                for (int i = 0; i < 50; i++) 
+                {
+
+			        for (int j = 0; j < 50; j++) 
+                    {
+                        CirclePlacer.worldData[i,j].SetG(0);
+                        CirclePlacer.worldData[i,j].SetH(0);
+                        CirclePlacer.worldData[i,j].SetParent(null);
+                        CirclePlacer.worldData[i,j].SetF();
+                    }
+                }
+
                 break;
 
             }
@@ -136,11 +149,11 @@ public class NewBehaviourScript : MonoBehaviour
                     }
 
                     // Set the G value (G represents the cost from the start node to this node 
-                    // 10 for non-diagonal, 14 for diagonal moves)
+                    // current node G + 10 for non-diagonal, + 14 for diagonal moves)
                     if (i == goalRow || j == goalCol) {
-                        CirclePlacer.worldData[i,j].SetG(10);
+                        CirclePlacer.worldData[i,j].SetG(node.GetG() + 10);
                     } else {
-                        CirclePlacer.worldData[i,j].SetG(14);
+                        CirclePlacer.worldData[i,j].SetG(node.GetG() + 14);
                     }
 
                     // Set the H value (represents the estimated cost to the goal) using Manhattan distance
