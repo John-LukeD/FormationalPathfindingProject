@@ -20,18 +20,19 @@ public class NewBehaviourScript : MonoBehaviour
     //declare LinkedList of type node for our closedList
     private static LinkedList<Node> closedList = new LinkedList<Node>();
     // List to store the final path in reverse order.
-    public static LinkedList<Node> reverseOrder = new LinkedList<Node>(); 
+    public static List<Node> reverseOrder = new List<Node>(); 
 
     private static int startCol;
     private static int startRow;
     private static int goalCol;
     private static int goalRow;
-
-    //declare currNode and initialize to 0
     private static Node currNode;
     private static Node startNode;
     private static Node goalNode;
     private static Node tempNode;
+    // Track the current target node -> this is for tacing the path back
+    // Using kinematicMovement to arrive at each node within reverseOrder List
+    private int currentTargetIndex = 0; 
 
     // Start is called before the first frame update
     void Start()
@@ -55,6 +56,10 @@ public class NewBehaviourScript : MonoBehaviour
             //check if the ray intersects with the plane's collider
             if (planeCollider.Raycast(ray, out hit, Mathf.Infinity))
             {
+                reverseOrder.Clear();
+                minHeap.Clear();
+                closedList.Clear();
+                currentTargetIndex = 0;
                 //set intersection point as the target position
                 targetTransform.position = hit.point;
 
@@ -67,16 +72,15 @@ public class NewBehaviourScript : MonoBehaviour
                 //Debug.Log("startZ:" + startRow);
                 //Debug.Log("goalx:" + goalCol);
                 //Debug.Log("goalZ:" + goalRow);
-                startNode = new Node(startRow,startCol,0);
-                goalNode = new Node(goalRow, goalCol,0);
 
-                RunAStarAlgorithm(startNode, goalNode);
+                RunAStarAlgorithm();
             }
         }
         RunKinematicArrive();
     }
 
-    private void RunAStarAlgorithm (Node startNode, Node goalNode) {
+    private void RunAStarAlgorithm() 
+    {
         // add the start node to the open list (MinHeap)
         minHeap.Add(CirclePlacer.worldData[startRow, startCol]);
         // currNode = startNode
@@ -87,14 +91,14 @@ public class NewBehaviourScript : MonoBehaviour
             // 1) Pop off node from min heap (automatically the node with the lowest F) and set as currNode
             currNode = minHeap.Remove();
             // 2) Check if currNode is goalNode
-            if (currNode.GetCol() == goalNode.GetCol() && currNode.GetRow() == goalNode.GetRow())
+            if (currNode.GetCol() == goalCol && currNode.GetRow() == goalRow)
             {
                 // a) if yes {break out of while loop - generate path back from parents } if no go to b
                 // Reverse order to get the path from start to goal
                 while (currNode != null) 
                 {
-                    Debug.Log(currNode);
-                    reverseOrder.AddFirst(currNode);
+                    //Debug.Log(currNode);
+                    reverseOrder.Insert(0, currNode); // Add to the front of the list
                     currNode = currNode.GetParent();
                 }
                 break;
@@ -125,8 +129,8 @@ public class NewBehaviourScript : MonoBehaviour
                 }
 
                 // Check if the neighbor is within the bounds of the grid and is traversable
-                if ((i >= 0 && i < 50) && (j >= 0 && j < 50)
-                        && (CirclePlacer.worldData[i,j].GetNodeType() == 0)) {
+                if ((i >= 0 && i < 50) && (j >= 0 && j < 50) && (CirclePlacer.worldData[i,j].GetNodeType() == 0)) 
+                    {
                     // Skip if the node is already in the closed list
                     if (closedList.Contains(CirclePlacer.worldData[i,j])) {
                         continue;
@@ -149,7 +153,7 @@ public class NewBehaviourScript : MonoBehaviour
                     CirclePlacer.worldData[i,j].SetF();
 
                     // Set the parent to the current node
-                    CirclePlacer.worldData[i,j].SetParent(CirclePlacer.worldData[currNode.GetRow(),currNode.GetCol()]);
+                    CirclePlacer.worldData[i,j].SetParent(CirclePlacer.worldData[node.GetRow(),node.GetCol()]);
 
                     // Add the generated neighbors to the open list as they are discovered
                     minHeap.Add(CirclePlacer.worldData[i,j]);
@@ -158,32 +162,33 @@ public class NewBehaviourScript : MonoBehaviour
         }
     }
 
-    private void RunKinematicArrive () {
-
-        //Create vector from character to target
-        Vector3 towardsTarget = targetTransform.position - myTransform.position;
-
-        //Check if the character is close enough to the target
-        if (towardsTarget.magnitude <= radiusOfSatisfaction) {
-            //close enough to stop!
-            //update targetTransform to be reverseOrder.remove()
-            
+    private void RunKinematicArrive()
+    {
+        if (currentTargetIndex >= reverseOrder.Count)
+        {
+            // Path traversal is complete
             return;
         }
 
-        //Normalize vector to only use the direction (shrink vector to length of 1)
+        Node targetNode = reverseOrder[currentTargetIndex];
+        Vector3 targetPosition = new Vector3((float)targetNode.GetCol(), targetTransform.position.y, (float)targetNode.GetRow());
+        Debug.Log(targetPosition.x);
+        Debug.Log(targetPosition.z);
+
+        // Move toward the current target node
+        Vector3 towardsTarget = targetPosition - myTransform.position;
+
+        if (towardsTarget.magnitude <= radiusOfSatisfaction)
+        {
+            // Close enough to the target, move to the next node
+            currentTargetIndex++;
+            return;
+        }
+
+        // Normalize vector and move toward the target
         towardsTarget = towardsTarget.normalized;
-
-        //face the target
-        Quaternion targetRoatation = Quaternion.LookRotation (towardsTarget);
-        myTransform.rotation = Quaternion.Lerp (myTransform.rotation, targetRoatation, 0.1f);
-
-        //Move along our vector (the direction we're facing)
-        Vector3 newPosition = myTransform.position;
-        //add forward vector of the charcter (direction character is facing)
-        //* the moveSpeed * regular time rather then time between update calls
-        newPosition += myTransform.forward * moveSpeed * Time.deltaTime;
-        myTransform.position = newPosition;
-        
+        Quaternion targetRotation = Quaternion.LookRotation(towardsTarget);
+        myTransform.rotation = Quaternion.Lerp(myTransform.rotation, targetRotation, 0.1f);
+        myTransform.position += myTransform.forward * moveSpeed * Time.deltaTime;
     }
 }

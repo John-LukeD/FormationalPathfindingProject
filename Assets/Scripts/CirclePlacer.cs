@@ -39,6 +39,8 @@ public class CirclePlacer : MonoBehaviour
 		cols = terrainLength / nodeSize;
 
 		worldData = new Node [rows, cols];
+
+        DecomposeWorld();
     }
 
     // Update is called once per frame
@@ -79,7 +81,6 @@ public class CirclePlacer : MonoBehaviour
 
 			for (int col = 0; col < cols; col++) {
 
-////////////////////////////////////////////////////////////
 				float x = startX + nodeCenterOffset + (nodeSize * col);
 				float z = startZ + nodeCenterOffset + (nodeSize * row);
 

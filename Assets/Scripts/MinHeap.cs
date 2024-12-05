@@ -83,6 +83,14 @@ public class MinHeap<T> where T : IComparable<T>
     {
         return heap.Contains(value);
     }
+    
+    // Clear method to reset the heap
+    public void Clear()
+    {
+        heap.Clear();
+        heap.Add(default(T)); // Re-add dummy element at index 0
+        size = 0;
+    }
 
     public int Count => size;
 }
