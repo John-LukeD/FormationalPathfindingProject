@@ -20,8 +20,8 @@ public class KinematicArrive_Formation : MonoBehaviour
 
 	private void Start () {
 		radiusOfSatisfaction = 0.5f;
-		moveSpeed = 5f;
-		turnSpeed = 5f;
+		moveSpeed = 7f;
+		turnSpeed = 7f;
 		obstacleBumpSpeed = 0.1f;
 
 		// Convert angle offset to a quaternion

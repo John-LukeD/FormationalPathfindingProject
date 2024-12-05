@@ -102,7 +102,7 @@ public class NewBehaviourScript : MonoBehaviour
                     reverseOrder.Insert(0, currNode); // Add to the front of the list
                     currNode = currNode.GetParent();
                 }
-                //MAYBE DELETE
+                // RESET G, H, F, and parent for each node after each A* itteration
                 for (int i = 0; i < 50; i++) 
                 {
 
@@ -198,7 +198,7 @@ public class NewBehaviourScript : MonoBehaviour
         // Normalize vector and move toward the target
         towardsTarget = towardsTarget.normalized;
         Quaternion targetRotation = Quaternion.LookRotation(towardsTarget);
-        myTransform.rotation = Quaternion.Lerp(myTransform.rotation, targetRotation, 0.1f);
+        myTransform.rotation = Quaternion.Lerp(myTransform.rotation, targetRotation, 8f * Time.deltaTime);
         myTransform.position += myTransform.forward * moveSpeed * Time.deltaTime;
     }
 }
